@@ -3,6 +3,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Virginia Trout Water Viewer - Rex Robichaux, May 2021</title>
+  <div id="titleDiv" class="esri-widget">
+          Virginia Trout Finder in 3D
+  </div>
   <style>
     html, body, #viewDiv {
       padding: 0;
@@ -10,11 +13,11 @@
       height: 100%;
       width: 100%;
     }
-	#titleDiv {
+	html, header, #titleDiv {
       font-weight: 400;
       font-style: normal;
       font-size: 1.2019rem;
-      padding: 5px;
+      padding: 0px;
      }
   </style>
   
@@ -40,9 +43,10 @@
 	  "esri/geometry/geometryEngine",
       "esri/geometry/support/webMercatorUtils",
 	  "esri/widgets/Legend",
+	  "esri/widgets/Daylight",
 	  "esri/widgets/Locate",
       "esri/geometry/Polygon"
-    ], function(Map, MapView, SceneView, WebScene, Search, FeatureLayer, Editor, BasemapToggle, BasemapGallery, Expand, Compass, LayerList, Sketch, GraphicsLayer, geometryEngine, webMercatorUtils, Legend, Locate, Polygon) {
+    ], function(Map, MapView, SceneView, WebScene, Search, FeatureLayer, Editor, BasemapToggle, BasemapGallery, Expand, Compass, LayerList, Sketch, GraphicsLayer, geometryEngine, webMercatorUtils, Legend, Daylight, Locate, Polygon) {
       
 	  
 	  var measureThisAction = {
@@ -110,10 +114,52 @@
         container: "viewDiv",
         map: map,
         center: [-79.754,38.0020],
-      zoom: 8
+        zoom: 8,
+		qualityProfile: "high",
+          environment: {
+            atmosphere: {
+              // creates a realistic view of the atmosphere
+              quality: "high"
+            },
+            lighting: {
+              // gets the current date at the user's location
+              // and converts it to the local date in Brest, France
+              date: new Date()
+            }
+		  },
+          ui: {
+            components: ["attribution", "navigation-toggle", "zoom"]
+          }
 	  });
 	  
-	  view.ui.add(titleDiv, "top-left");
+	  //view.ui.add(titleDiv, "top-left");
+	  
+	  const daylightWidget = new Daylight({
+          view: view,
+          // plays the animation twice as fast than the default one
+          playSpeedMultiplier: 3,
+          // disable the timezone selection button
+          visibleElements: {
+            timezone: false
+          }
+        });
+
+        const btnDaylight = document.getElementById("buttonDaylight");
+
+        view.ui.add(btnDaylight, "bottom-left");
+        view.ui.add(daylightWidget, "bottom-left");
+
+        // hide and show widget for display on small devices
+        let widgetIsVisible = true;
+        btnDaylight.addEventListener("click", () => {
+          if (widgetIsVisible) {
+            view.ui.remove(daylightWidget);
+            widgetIsVisible = false;
+          } else {
+            view.ui.add(daylightWidget, "bottom-left");
+            widgetIsVisible = true;
+          }
+        });
 	  
 	  var locateBtn = new Locate({
         view: view
@@ -245,7 +291,7 @@
 				// don't show legend twice
 					item.panel = {
 						content: "legend",
-						open: true
+						open: false
 					};
 				}
 			}
@@ -263,11 +309,12 @@
       });
     });
   </script>
+  
 </head>
 <body>
   <div id="viewDiv"></div>
-	<div id="titleDiv" class="esri-widget">
-          Virginia Trout Finder in 3D
-    </div>
+    <button id="buttonDaylight" class="esri-widget esri-widget--button">
+      <span class="esri-icon-lightbulb"></span>
+    </button>
 </body>
 </html>
