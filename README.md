@@ -12,3 +12,7 @@ https://rexrobichaux.github.io/VATroutFinderScene.html
 Now in 3D! This new scene viewer allows users to interact with rivers, lakes and streams in a 3D, elevation-aware scene. Essentially the Virginia Trout Finder with Esri's WebScene / Scene capabilities included. To activate 3D mode, simply right-click & drag your mouse, or use the 3D navigation tools in the upper left of the screen. 
 
 ![alt text](https://github.com/rexrobichaux/rexrobichaux.github.io/blob/main/VATroutFinder3d.png?raw=true)
+
+By leveraging the Daylight widget, in combination with the 3D navigation, you can see when dawn or twilight conditions will be just right for any location for that next fishing trip: 
+
+![alt_text](https://github.com/rexrobichaux/rexrobichaux.github.io/blob/main/VATroutFinder3_2.png?raw=true)
